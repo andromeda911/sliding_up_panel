@@ -266,7 +266,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
                   );
                 },
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
+                  //height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: widget.body,
                 ),
