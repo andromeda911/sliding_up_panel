@@ -78,12 +78,9 @@ class _HomePageState extends State<HomePage> {
                 child: BottomNavigationBar(
                   backgroundColor: Colors.blue[50],
                   items: [
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.home), label: 'Home'),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.man), label: 'Profile'),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.settings), label: 'Settings'),
+                    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                    BottomNavigationBarItem(icon: Icon(Icons.man), label: 'Profile'),
+                    BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
                   ],
                 ),
               ),
@@ -109,10 +106,7 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 width: 30,
                                 height: 7,
-                                decoration: BoxDecoration(
-                                    color: Colors.blueAccent,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(12.0))),
+                                decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.all(Radius.circular(12.0))),
                               ),
                             ],
                           ),
@@ -127,16 +121,12 @@ class _HomePageState extends State<HomePage> {
             minHeight: _panelHeightClosed,
             parallaxEnabled: true,
             parallaxOffset: .5,
-            body: _body(),
             controller: panelController,
             scrollController: scrollController,
             panelBuilder: () => _panel(),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
             onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
-                  _initFabHeight;
+              _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
             }),
           ),
 
@@ -177,10 +167,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, .25), blurRadius: 16.0)
-                ],
+                boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, .25), blurRadius: 16.0)],
               ),
             ),
           ),
@@ -221,16 +208,8 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _button(
-                    "Popular",
-                    Icons.favorite,
-                    Colors.blue,
-                    () => {
-                          panelController.forseScrollChange(
-                              scrollController.animateTo(100,
-                                  duration: Duration(milliseconds: 400),
-                                  curve: Curves.ease))
-                        }),
+                _button("Popular", Icons.favorite, Colors.blue,
+                    () => {panelController.forseScrollChange(scrollController.animateTo(100, duration: Duration(milliseconds: 400), curve: Curves.ease))}),
                 _button("Food", Icons.restaurant, Colors.red, () => {}),
                 _button("Events", Icons.event, Colors.amber, () => {}),
                 _button("More", Icons.more_horiz, Colors.green, () => {}),
@@ -326,8 +305,7 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget _button(
-      String label, IconData icon, Color color, void Function()? onTap) {
+  Widget _button(String label, IconData icon, Color color, void Function()? onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -338,8 +316,7 @@ class _HomePageState extends State<HomePage> {
               icon,
               color: Colors.white,
             ),
-            decoration:
-                BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [
               BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.15),
                 blurRadius: 8.0,
@@ -363,8 +340,7 @@ class _HomePageState extends State<HomePage> {
         maxZoom: 15,
       ),
       layers: [
-        TileLayerOptions(
-            urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"),
+        TileLayerOptions(urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"),
         MarkerLayerOptions(markers: [
           Marker(
               point: LatLng(40.441753, -80.011476),

@@ -37,7 +37,7 @@ class SlidingUpPanel extends StatefulWidget {
   /// The Widget that lies underneath the sliding panel.
   /// This Widget automatically sizes itself
   /// to fill the screen.
-  final Widget? body;
+  final Widget? Function(double ratio)? bodyBuilder;
 
   /// Optional persistent widget that floats above the [panel] and attaches
   /// to the top of the [panel]. Content at the top of the panel will be covered
@@ -165,7 +165,7 @@ class SlidingUpPanel extends StatefulWidget {
 
   SlidingUpPanel(
       {Key? key,
-      this.body,
+      this.bodyBuilder,
       this.collapsed,
       this.minHeight = 100.0,
       this.maxHeight = 500.0,
@@ -256,20 +256,21 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
       alignment: widget.slideDirection == SlideDirection.UP ? Alignment.bottomCenter : Alignment.topCenter,
       children: <Widget>[
         //make the back widget take up the entire back side
-        widget.body != null
+        widget.bodyBuilder != null
             ? AnimatedBuilder(
                 animation: _ac,
                 builder: (context, child) {
+                  var workingHeight = MediaQuery.of(context).size.height - widget.minHeight;
+                  var acValueAbs = workingHeight * _ac.value;
+
                   return Positioned(
                     top: widget.parallaxEnabled ? _getParallax() : 0.0,
-                    child: child ?? SizedBox(),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: widget.bodyBuilder!(_ac.value) ?? SizedBox(),
+                    ),
                   );
                 },
-                child: Container(
-                  //height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: widget.body,
-                ),
               )
             : Container(),
 
@@ -378,40 +379,42 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
                 ),
               ),
         if (widget.floatingWidgetBuilder != null)
-          Positioned(
-              top: widget.slideDirection == SlideDirection.UP ? 0 : null,
-              child: AnimatedBuilder(
-                animation: _ac,
-                builder: (context, child) {
-                  double initPadding = 226;
-                  double topPadding = initPadding;
-                  double h = 64;
-                  var workingHeight = MediaQuery.of(context).size.height - widget.minHeight;
-                  var acValueAbs = workingHeight * _ac.value;
+          AnimatedBuilder(
+            animation: _ac,
+            builder: (context, child) {
+              double margin = 16;
+              double h = 53;
 
-                  if ((acValueAbs > workingHeight - initPadding - h)) {
-                    topPadding = workingHeight - acValueAbs - h;
-                    if (topPadding <= h) {
-                      topPadding = h;
-                    }
-                  }
-                  var padRatio = 1 - (workingHeight - acValueAbs - h) / initPadding;
-                  if (padRatio < 0) {
-                    padRatio = 0;
-                  }
-                  //if (_ac.value > 0.75) {
-                  return Container(
-                    margin: EdgeInsets.only(top: topPadding),
+              double initPadding = 226 + margin;
+              double topPadding = initPadding;
+              double additionalH = 20;
+              var workingHeight = MediaQuery.of(context).size.height - widget.minHeight;
+              var acValueAbs = workingHeight * _ac.value;
+
+              var padRatio = 1 - (workingHeight - acValueAbs - h - margin) / initPadding;
+              if ((acValueAbs > workingHeight - initPadding - h)) {
+                topPadding = workingHeight - acValueAbs - h;
+                if (topPadding <= h + additionalH + margin) {
+                  topPadding = h + additionalH + margin;
+                }
+              }
+              if (padRatio < 0) {
+                padRatio = 0;
+              }
+              //if (_ac.value > 0.75) {
+              return Positioned(
+                  bottom: MediaQuery.of(context).size.height - topPadding - h + margin,
+                  child: Container(
                     child: widget.floatingWidgetBuilder!(
                       _ac,
                       topPadding,
-                      (topPadding - h) / (initPadding - h),
+                      (topPadding - h - additionalH - margin) / (initPadding - h - additionalH - margin),
                     ),
-                  );
-                  //} else
-                  //  return SizedBox();
-                },
-              )),
+                  ));
+              //} else
+              //  return SizedBox();
+            },
+          ),
       ],
     );
   }
