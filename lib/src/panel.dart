@@ -461,6 +461,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
         } else if (result.path.any((entry) => entry.target.runtimeType == _HorizontalScrollableWidgetRenderBox)) {
           _isHorizontalScrollableWidget = true;
           widget.controller?._nowTargetForceDraggable = false;
+          _ignoreScrollable = true;
         } else if (result.path.any((entry) => entry.target.runtimeType == _IgnoreDraggableWidgetWidgetRenderBox)) {
           _ignoreScrollable = true;
           widget.controller?._nowTargetForceDraggable = false;
@@ -483,6 +484,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
         }
 
         if (_isHorizontalScrollableWidget && _scrollableAxis == Axis.horizontal) {
+          //if (_isHorizontalScrollableWidget) {
           return;
         }
 
